@@ -1,0 +1,25 @@
+{
+  "name": "migranthub",
+  "version": "0.0.1",
+  "description": "First app deployement",
+  "main": "MigrantHub/client/src/index.js",
+  "dependencies": {
+    "mongodb": "^3.1.10",
+    "nconf": "^0.10.0",
+    "react-share": "^2.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tusmanakhter/MigrantHub.git"
+  },
+  "author": "Refugee Center Montreal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tusmanakhter/MigrantHub/issues"
+  },
+  "homepage": "https://github.com/tusmanakhter/MigrantHub#readme"
+}
