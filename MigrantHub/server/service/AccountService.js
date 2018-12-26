@@ -23,18 +23,18 @@ module.exports = {
     throw new ServerError('There was an error creating migrant user.', 400, errors.array());
   },
 
-  async createBusiness(parsedBusinessUserObject) {
+  async createBusiness(parsedBusinessUserObject, validationObject) {
     const businessUserObject = parsedBusinessUserObject;
-    const errors = await BusinessAccountValidator.businessAccountValidator(businessUserObject);
+    const errors = ExpressValidator.validationResult(validationObject).formatWith(errorFormatter);
 
-    if (errors === '') {
+    if (errors.isEmpty()) {
       const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(businessUserObject.password, salt);
       businessUserObject.password = hash;
 
       return BusinessRepository.createBusiness(businessUserObject);
     }
-    throw new ServerError('There was an error creating business user.', 400, errors);
+    throw new ServerError('There was an error creating business user.', 400, errors.array());
   },
 
   async createAdmin(parsedAdminUserObject) {

@@ -8,9 +8,9 @@ module.exports = {
     return AccountService.createUser(parsedMigrantUserObject, validationObject);
   },
 
-  async createBusiness(businessUserObject) {
+  async createBusiness(businessUserObject, validationObject) {
     const parsedBusinessUserObject = qs.parse(businessUserObject);
-    return AccountService.createBusiness(parsedBusinessUserObject);
+    return AccountService.createBusiness(parsedBusinessUserObject, validationObject);
   },
 
   async createAdmin(adminUserObject) {

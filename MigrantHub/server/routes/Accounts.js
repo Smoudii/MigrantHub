@@ -4,13 +4,14 @@ const router = express.Router();
 const passport = require('passport');
 const AccountController = require('../controllers/AccountController');
 const { controllerHandler } = require('../controllers/ControllerUtils');
+const { validateBusiness } = require('../validators/BusinessAccountValidator');
 const { validateMigrant } = require('../validators/MigrantAccountValidator');
 
 router.get('/', controllerHandler(AccountController.getUser, req => [req.user]));
 router.get('/get/user', controllerHandler(AccountController.getUserType, req => [req.user]));
-router.post('/create/business', controllerHandler(AccountController.createBusiness, req => [req.body]));
 router.post('/create/admin', controllerHandler(AccountController.createAdmin, req => [req.body]));
 router.post('/create/user', validateMigrant, controllerHandler(AccountController.createUser, req => [req.body, req]));
+router.post('/create/business', validateBusiness, controllerHandler(AccountController.createBusiness, req => [req.body, req]));
 
 router.post('/login', (req, res, next) => { next(); }, passport.authenticate('local'), (req, res) => {
   const user = {
