@@ -18,9 +18,9 @@ module.exports = {
 
   upload: multer({ storage: multerStorage }),
 
-  async createEvent(user, eventObject) {
+  async createEvent(user, eventObject, validationObject) {
     const parsedEventObj = qs.parse(eventObject);
-    return EventService.createEvent(user, parsedEventObj);
+    return EventService.createEvent(user, parsedEventObj, validationObject);
   },
 
   async getEvents(userId) {
@@ -31,9 +31,9 @@ module.exports = {
     return EventService.getEvent(eventId);
   },
 
-  async updateEvent(user, eventObject) {
+  async updateEvent(user, eventObject, validationObject) {
     const parsedEventObject = qs.parse(eventObject);
-    return EventService.updateEvent(user, parsedEventObject);
+    return EventService.updateEvent(user, parsedEventObject, validationObject);
   },
 
   async deleteEvent(eventId) {

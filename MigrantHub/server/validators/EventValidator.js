@@ -1,76 +1,86 @@
-const validator = require('validator');
+const { check } = require('express-validator/check');
 
 module.exports = {
+    validateEvent: [
+        check('eventName')
+            .not()
+            .isEmpty()
+            .withMessage('Event name is required.'),
 
-  // Function to perform server-side validation of the create event before sending to db.
-  async eventValidator(businessObject) {
-    let errors = '';
-    if (validator.isEmpty(businessObject.eventName)) {
-      errors += '\nEvent name is required';
-    }
+        check('description')
+            .not()
+            .isEmpty()
+            .withMessage('description is required.')
+            .isLength({min: 10})
+            .withMessage("Description must be at least 10 characters"),
 
-    if (validator.isEmpty(businessObject.description)) {
-      errors += '\nDescription is required';
-    } else if (!validator.isLength(businessObject.description, { min: 10 })) {
-      errors += '\nDescription must be at least 10 characters';
-    }
+        check('location')
+            .optional()
+            .not()
+            .isEmpty()
+            .withMessage('Location information is required'),
 
-    if (typeof businessObject.location !== 'undefined') {
-      if (validator.isEmpty(businessObject.location.address)) {
-        errors += '\nAddress is required';
-      }
+        check('location.address')
+            .optional()
+            .not()
+            .isEmpty()
+            .withMessage('Address is required and empty'),
 
-      if (validator.isEmpty(businessObject.location.city)) {
-        errors += '\nCity is required';
-      } else if (validator.isNumeric(businessObject.location.city)) {
-        errors += '\nCity is invalid';
-      }
+        check('location.postalCode')
+            .optional()
+            .not()
+            .isEmpty()
+            .withMessage('Postal code is required and empty')
+            .isLength({ min: 7, max: 7 })
+            .withMessage('Postal code is invalid')
+            .matches('[A-Za-z][0-9][A-Za-z] [0-9][A-Za-z][0-9]')
+            .withMessage('Postal code is invalid'),
 
-      if (validator.isEmpty(businessObject.location.province)) {
-        errors += '\nProvince is required';
-      }
+        check('location.city')
+            .optional()
+            .not()
+            .isEmpty()
+            .withMessage('City is required and empty')
+            .isAlpha()
+            .withMessage('City name is not valid'),
 
-      if (validator.isEmpty(businessObject.location.postalCode)) {
-        errors += '\nPostal code is required';
-      } else if (!validator.isLength(businessObject.location.postalCode, { min: 7, max: 7 })) {
-        errors += '\nPostal code is invalid';
-      }
-      if (!validator.matches(businessObject.location.postalCode, '[A-Za-z][0-9][A-Za-z] [0-9][A-Za-z][0-9]')) {
-        errors += '\nPostal code should be in the format A1B 2E3';
-      }
+        check('location.province')
+            .optional()
+            .not()
+            .isEmpty()
+            .withMessage('Province is required and empty'),
 
-      if (validator.isEmpty(businessObject.location.phoneNumber)) {
-        errors += '\nPhone number is required';
-      } else if (!validator.isLength(businessObject.location.phoneNumber, { min: 14, max: 14 })) {
-        errors += '\nPhone number is invalid';
-      }
-      if (!validator.matches(businessObject.location.phoneNumber, '^[(][0-9]{3}[)] [0-9]{3}[-][0-9]{4}$')) {
-        errors += '\nPhone number should be in the format (123) 456-7890';
-      }
-    }
+        check('location.phoneNumber')
+            .optional()
+            .not()
+            .isEmpty()
+            .withMessage('Phone number is required and empty')
+            .isMobilePhone(['en-CA'])
+            .withMessage('Phone number is not valid')
+            .matches('[(][0-9]{3}[)][ ][0-9]{3}[-][0-9]{4}')
+            .withMessage('Phone number is not valid'),
 
-    if (validator.isEmpty(businessObject.dateStart)) {
-      errors += '\nStart date is required';
-    } else if (validator.isBefore(businessObject.dateStart)) {
-      errors += '\nStart date is invalid';
-    }
+        check('dateStart')
+            .optional()
+            .not()
+            .isEmpty()
+            .withMessage('Starting date is required'),
 
-    if (validator.isEmpty(businessObject.dateEnd)) {
-      errors += '\nEnd date is required';
-    } else if (validator.isBefore(businessObject.dateEnd, businessObject.dateStart)) {
-      errors += '\nEnd date is invalid';
-    }
+        check('dateEnd')
+            .optional()
+            .not()
+            .isEmpty()
+            .withMessage('Ending date is required'),
 
-    if (validator.isEmpty(businessObject.timeStart)) {
-      errors += '\nStart time is required';
-    }
+        check('timeStart')
+            .optional()
+            .not()
+            .isEmpty()
+            .withMessage('Starting time is required'),
 
-    if (validator.isEmpty(businessObject.timeEnd)) {
-      errors += '\nEnd time is required';
-    } else if (businessObject.secondsEnd <= businessObject.secondsStart) {
-      errors += '\nEnd time is invalid';
-    }
-
-    return errors;
-  },
-};
+        check('timeEnd')
+            .optional()
+            .not()
+            .isEmpty()
+            .withMessage('Ending time is required'),
+    ]};

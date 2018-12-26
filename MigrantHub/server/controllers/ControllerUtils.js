@@ -1,5 +1,6 @@
 const { logger, formatMessage } = require('../config/winston');
 const { ServerError } = require('../errors/ServerError');
+const qs = require('qs');
 
 const controllerHandler = (promise, params) => async (req, res, next) => {
   const boundParams = params ? params(req, res, next) : [];
@@ -18,4 +19,17 @@ const controllerHandler = (promise, params) => async (req, res, next) => {
   }
 };
 
-module.exports = { controllerHandler };
+const validationObjectHandler = (req, res, next) => {
+  var body = qs.parse(req.body.eventDetails);
+  req.body = body;
+  next();
+};
+
+const errorFormatter = ({ msg, param, value, nestedErrors }) => {
+    console.log(msg);
+    console.log(param);
+    console.log(value);
+    return `[${param}]: Message: [${msg}] value: [${value}]`;
+};
+
+module.exports = { controllerHandler, errorFormatter , validationObjectHandler };
