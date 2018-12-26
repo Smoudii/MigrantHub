@@ -1,25 +1,21 @@
-const validator = require('validator');
+const { check } = require('express-validator/check');
 
 module.exports = {
-  // Function to perform server-side validation of the create business account before sending to db.
-  async adminAccountValidator(adminObject) {
-    let errors = '';
+    validateAdmin:[
+        check('email')
+            .isEmail()
+            .withMessage('Email is required.')
+            .not()
+            .isEmpty()
+            .withMessage('Email is not valid.'),
 
-    if (validator.isEmpty(adminObject.email)) {
-      errors += "{'\n'}Email is required";
-    } else if (!validator.isEmail(adminObject.email)) {
-      errors += "{'\n'}Email is not valid";
-    }
-    if (validator.isEmpty(adminObject.password)) {
-      errors += "{'\n'}Password is empty";
-    } else if (validator.isEmpty(adminObject.confirmPassword)) {
-      errors += "{'\n'}Confirm password is empty";
-    } else if (!validator.equals(adminObject.password, adminObject.confirmPassword)) {
-      errors += "{'\n'}Passwords do not match";
-    } else if (!validator.isLength(adminObject.password, { min: 8 })) {
-      errors += "{'\n'}Password must be atleast 8 characters";
-    }
-
-    return errors;
-  },
-};
+        check('password')
+            .not()
+            .isEmpty()
+            .withMessage('Password is empty')
+            .isLength({ min: 8 })
+            .withMessage('Password must be at least 8 characters.')
+            .not()
+            .equals('confirmPassword')
+            .withMessage('Password do not match'),
+    ]};

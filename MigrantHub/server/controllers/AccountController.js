@@ -13,9 +13,9 @@ module.exports = {
     return AccountService.createBusiness(parsedBusinessUserObject, validationObject);
   },
 
-  async createAdmin(adminUserObject) {
+  async createAdmin(adminUserObject, validationObject) {
     const parsedAdminUserObject = qs.parse(adminUserObject);
-    return AccountService.createAdmin(parsedAdminUserObject);
+    return AccountService.createAdmin(parsedAdminUserObject, validationObject);
   },
 
   async getUserType(user) {

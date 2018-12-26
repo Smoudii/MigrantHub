@@ -1,6 +1,4 @@
 const bcrypt = require('bcryptjs');
-const BusinessAccountValidator = require('../validators/BusinessAccountValidator');
-const AdminAccountValidator = require('../validators/AdminAccountValidator');
 const MigrantRepository = require('../repository/MigrantRepository');
 const BusinessRepository = require('../repository/BusinessRepository');
 const AdminRepository = require('../repository/AdminRepository');
@@ -37,17 +35,17 @@ module.exports = {
     throw new ServerError('There was an error creating business user.', 400, errors.array());
   },
 
-  async createAdmin(parsedAdminUserObject) {
+  async createAdmin(parsedAdminUserObject, validationObject) {
     const adminUserObject = parsedAdminUserObject;
-    const errors = await AdminAccountValidator.adminAccountValidator(adminUserObject);
+    const errors = ExpressValidator.validationResult(validationObject).formatWith(errorFormatter);
 
-    if (errors === '') {
+    if (errors.isEmpty()) {
       const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(adminUserObject.password, salt);
       adminUserObject.password = hash;
 
       return AdminRepository.createAdmin(adminUserObject);
     }
-    throw new ServerError('There was an error creating admin user.', 400, errors);
+    throw new ServerError('There was an error creating admin user.', 400, errors.array());
   },
 };
