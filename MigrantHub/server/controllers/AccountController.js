@@ -3,9 +3,9 @@ const AccountService = require('../service/AccountService');
 const { ServerError } = require('../errors/ServerError');
 
 module.exports = {
-  async createUser(migrantUserObject) {
+  async createUser(migrantUserObject, validationObject) {
     const parsedMigrantUserObject = qs.parse(migrantUserObject);
-    return AccountService.createUser(parsedMigrantUserObject);
+    return AccountService.createUser(parsedMigrantUserObject, validationObject);
   },
 
   async createBusiness(businessUserObject) {

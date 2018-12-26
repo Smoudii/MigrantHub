@@ -1,25 +1,26 @@
 const bcrypt = require('bcryptjs');
 const BusinessAccountValidator = require('../validators/BusinessAccountValidator');
-const MigrantAccountValidator = require('../validators/MigrantAccountValidator');
 const AdminAccountValidator = require('../validators/AdminAccountValidator');
 const MigrantRepository = require('../repository/MigrantRepository');
 const BusinessRepository = require('../repository/BusinessRepository');
 const AdminRepository = require('../repository/AdminRepository');
 const { ServerError } = require('../errors/ServerError');
+const ExpressValidator = require('express-validator/check');
+const { errorFormatter } = require('../controllers/ControllerUtils');
 
 module.exports = {
-  async createUser(parsedMigrantUserObject) {
+  async createUser(parsedMigrantUserObject, validationObject) {
     const migrantUserObject = parsedMigrantUserObject;
-    const errors = await MigrantAccountValidator.migrantAccountValidator(migrantUserObject);
+    const errors = ExpressValidator.validationResult(validationObject).formatWith(errorFormatter);
 
-    if (errors === '') {
+    if (errors.isEmpty()) {
       const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(migrantUserObject.password, salt);
       migrantUserObject.password = hash;
 
       return MigrantRepository.createUser(migrantUserObject);
     }
-    throw new ServerError('There was an error creating migrant user.', 400, errors);
+    throw new ServerError('There was an error creating migrant user.', 400, errors.array());
   },
 
   async createBusiness(parsedBusinessUserObject) {
