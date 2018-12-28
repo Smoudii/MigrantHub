@@ -12,7 +12,7 @@ spec:
         name: web
     spec:
       containers:
-      - image: gcr.io/migranthub/migranthub
+      - image: gcr.io/migranthub/migranthub:0.0.5
         name: web
         ports:
         - containerPort: 3000
