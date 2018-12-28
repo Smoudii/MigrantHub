@@ -16,4 +16,4 @@ const facebookConfig = {
   profileFields: ['id', 'name', 'email'],
 };
 
-module.exports = { dbConfig, facebookConfig, mongoAtlasConnectionString };
+module.exports = { dbConfig, facebookConfig };
