@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const dbConfig = {
   db: {
-    host: process.env.MONGO_HOST || 'localhost',
+    host: process.env.MONGO_HOST || 'localhost' || 'mongo',
     port: parseInt(process.env.MONGO_PORT, 10) || 27017,
     name: process.env.MONGO_NAME || 'migranthub',
   },
