@@ -69,7 +69,7 @@ const { db: { host, port, name } } = dbConfig;
 const connectionString = `mongodb://${host}:${port}/${name}`;
 const mongoAtlasString = dbConfig.mongoAtlasConnectionString;
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoAtlasString, (error) => {
+mongoose.connect(mongoAtlasString, {useNewURLParser: true},  (error) => {
   if(error) {
     console.error('Cant connect to Mongo Atlas database.');
     throw error;
