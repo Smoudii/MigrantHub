@@ -1,5 +1,4 @@
 version: '3'
-kind: Service
 services:
   server:
     build:
