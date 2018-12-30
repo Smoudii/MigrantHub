@@ -12,8 +12,12 @@ const dbConfig = {
 const facebookConfig = {
   clientID: process.env.FACEBOOK_APP_ID,
   clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: 'http://35.203.28.214:3000/api/accounts/auth/facebook/callback',
   profileFields: ['id', 'name', 'email'],
 };
 
-module.exports = { dbConfig, facebookConfig };
+const googleConfig = {
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+};
+
+module.exports = { dbConfig, facebookConfig, googleConfig };
