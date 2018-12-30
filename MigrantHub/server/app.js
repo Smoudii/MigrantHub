@@ -65,8 +65,16 @@ app.use((err, req, res, next) => {
 });
 
 // MongoDB/Mongoose Connection
+
 // const { db: { host, port, name } } = dbConfig;
 // const connectionString = `mongodb://${host}:${port}/${name}`;
+// mongoose.connect(connectionString, (error) => {
+//   if (error) {
+//     console.error('Check if MongoDB is installed and running.');
+//     throw error;
+//   }
+// });
+
 const mongoAtlasString = dbConfig.mongoAtlasConnectionString;
 mongoose.Promise = global.Promise;
 mongoose.connect(mongoAtlasString, (error) => {
@@ -75,12 +83,7 @@ mongoose.connect(mongoAtlasString, (error) => {
     throw error;
   }
 });
-// mongoose.connect(connectionString, (error) => {
-//   if (error) {
-//     console.error('Check if MongoDB is installed and running.');
-//     throw error;
-//   }
-// });
+
 const database = mongoose.connection;
 database.on('error', console.error.bind(console, 'MongoDB connection error: '));
 
