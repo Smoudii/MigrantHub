@@ -95,30 +95,28 @@ function createDocRecurse(err) {
     process.exit(1);
   }
   if (lineList.length) {
-    let line = lineList.shift();
+    const line = lineList.shift();
     const doc = new OrgService();
-    let location = {
+    const location = {
       address: '',
       city: '',
       province: '',
       postalCode: '',
       metro: '',
     };
-    line.split(';').forEach(function (entry, i) {
+    line.split(';').forEach((entry, i) => {
       doc[servicesSchemaKeyList[i]] = entry;
-      doc['dateCreated'] = date;
+      doc.dateCreated = date;
 
-      //Location
-      if(i == 8) location.address = entry;
-      else if (i == 9) location.city = entry;
-      else if (i == 10) location.province = entry;
-      else if (i == 11) location.postalCode = entry;
-      else if (i == 12) location.metro = entry;
-      else if (i == 13) doc['location'] = location;
+      // Location
+      if (i === 8) location.address = entry;
+      else if (i === 9) location.city = entry;
+      else if (i === 10) location.province = entry;
+      else if (i === 11) location.postalCode = entry;
+      else if (i === 12) location.metro = entry;
+      else if (i === 13) doc.location = location;
     });
     doc.save(createDocRecurse);
-  } else {
-      
   }
 }
 
