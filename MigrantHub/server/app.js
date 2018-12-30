@@ -65,7 +65,7 @@ app.use((err, req, res, next) => {
 });
 
 // MongoDB/Mongoose Connection
-const { db: { host, port, name } } = dbConfig;
+// const { db: { host, port, name } } = dbConfig;
 // const connectionString = `mongodb://${host}:${port}/${name}`;
 const mongoAtlasString = dbConfig.mongoAtlasConnectionString;
 mongoose.Promise = global.Promise;
