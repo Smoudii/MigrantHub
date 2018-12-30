@@ -15,7 +15,7 @@ const orgServiceSchema = new Schema({
     city: { type: String, required: false },
     province: { type: String, required: false },
     postalCode: { type: String, required: false },
-    metro: { type: String, required: false }, 
+    metro: { type: String, required: false },
   },
   openHours: { type: String, required: false },
   phone1: { type: String, required: false },

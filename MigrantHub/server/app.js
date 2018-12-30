@@ -12,14 +12,7 @@ const { dbConfig } = require('./config');
 const passport = require('./passport');
 const { logger, formatMessage } = require('./config/winston');
 
-<<<<<<< HEAD
-
 const OrgService = require('./models/OrgService');
-=======
-const fs = require('fs');
-const OrgService = require("./models/OrgService");
->>>>>>> 0c3e1ad8f70330f5a6d4d17fbddb967694b7ab62
-
 
 const app = express();
 
