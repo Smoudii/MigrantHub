@@ -66,15 +66,15 @@ app.use((err, req, res, next) => {
 
 // MongoDB/Mongoose Connection
 const { db: { host, port, name } } = dbConfig;
-const connectionString = `mongodb://${host}:${port}/${name}`;
+// const connectionString = `mongodb://${host}:${port}/${name}`;
 const mongoAtlasString = dbConfig.mongoAtlasConnectionString;
 mongoose.Promise = global.Promise;
 mongoose.connect(mongoAtlasString, (error) => {
-  if(error) {
+  if (error) {
     console.error('Cant connect to Mongo Atlas database.');
     throw error;
   }
-})
+});
 // mongoose.connect(connectionString, (error) => {
 //   if (error) {
 //     console.error('Check if MongoDB is installed and running.');
