@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
+const fs = require('fs');
 const expressSession = require('express-session');
 const router = require('./routes/Index');
 
@@ -12,8 +12,8 @@ const { dbConfig } = require('./config');
 const passport = require('./passport');
 const { logger, formatMessage } = require('./config/winston');
 
-const fs = require('fs');
-const OrgService = require("./models/OrgService");
+
+const OrgService = require('./models/OrgService');
 
 
 const app = express();
@@ -84,26 +84,41 @@ database.on('error', console.error.bind(console, 'MongoDB connection error: '));
 
 // Inputting all the Services Located in Montreal
 const servicesSchemaKeyList = ['categorie', 'category', 'subCategorie', 'subCategory', 'acronym', 'organisation', 'organization', 'description', 'address', 'city',
-                               'province', 'postalCode', 'metro', 'openHours', 'phone1', 'phone2', 'fax', 'website', 'email', 'notes'];
+  'province', 'postalCode', 'metro', 'openHours', 'phone1', 'phone2', 'fax', 'website', 'email', 'notes'];
 
 const date = new Date();
 const lineList = fs.readFileSync('mtlServices.csv').toString().split('\n');
 lineList.shift(); // Shift the headings off the list of records.
 
 // Recursively go through file adding services.
-function createDocRecurse (err) {
+function createDocRecurse(err) {
   if (err) {
-      console.log(err);
-      process.exit(1);
+    console.log(err);
+    process.exit(1);
   }
   if (lineList.length) {
-      var line = lineList.shift();
-      var doc = new OrgService();
-      line.split(';').forEach(function (entry, i) {
-          doc[servicesSchemaKeyList[i]] = entry;
-          doc['dateCreated'] = date;
-      });
-      doc.save(createDocRecurse);
+    let line = lineList.shift();
+    const doc = new OrgService();
+    let location = {
+      address: '',
+      city: '',
+      province: '',
+      postalCode: '',
+      metro: '',
+    };
+    line.split(';').forEach(function (entry, i) {
+      doc[servicesSchemaKeyList[i]] = entry;
+      doc['dateCreated'] = date;
+
+      //Location
+      if(i == 8) location.address = entry;
+      else if (i == 9) location.city = entry;
+      else if (i == 10) location.province = entry;
+      else if (i == 11) location.postalCode = entry;
+      else if (i == 12) location.metro = entry;
+      else if (i == 13) doc['location'] = location;
+    });
+    doc.save(createDocRecurse);
   } else {
       
   }
