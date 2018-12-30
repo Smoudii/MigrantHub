@@ -12,6 +12,10 @@ const { dbConfig } = require('./config');
 const passport = require('./passport');
 const { logger, formatMessage } = require('./config/winston');
 
+const fs = require('fs');
+const OrgService = require("./models/OrgService");
+
+
 const app = express();
 
 require('dotenv').config();
@@ -79,70 +83,14 @@ database.on('error', console.error.bind(console, 'MongoDB connection error: '));
 
 
 // Inputting all the Services Located in Montreal
-var fs = require('fs');
-var lineList = fs.readFileSync('mtlServices.csv').toString().split('\n');
+const servicesSchemaKeyList = ['categorie', 'category', 'subCategorie', 'subCategory', 'acronym', 'organisation', 'organization', 'description', 'address', 'city',
+                               'province', 'postalCode', 'metro', 'openHours', 'phone1', 'phone2', 'fax', 'website', 'email', 'notes'];
+
+const date = new Date();
+const lineList = fs.readFileSync('mtlServices.csv').toString().split('\n');
 lineList.shift(); // Shift the headings off the list of records.
 
-var servicesSchemaKeyList = ['Categorie', 'Category', 'SubCategorie', 'SubCategory', 'Acronym', 'Organisation', 'Organization', 'Description', 'Address', 'City', 'Province', 'PostalCode', 'Metro', 'OpenHours', 'Phone1', 'Phone2', 'Fax', 'Website', 'Email', 'Notes'];
-
-var servicesMtlSchema = new mongoose.Schema({
-  Categorie: String,
-  Category: String,
-  SubCategorie: String,
-  SubCategory: String, 
-  Acronym: String,
-  Organisation: String,
-  Organization: String,
-  Description: String,
-  Address: String,
-  City: String,
-  Province: String,
-  PostalCode: String,
-  Metro: String,
-  OpenHour: String,
-  Phone1: String,
-  Phone2: String,
-  Fax: String,
-  Website: String,
-  Email: String,
-  Notes: String
-});
-
-var servicesMtlDoc = mongoose.model('ServicesMtl', servicesMtlSchema);
-
-function queryAllEntries () {
-  servicesMtlDoc.aggregate([
-      {
-        Categorie: '$Categorie',
-        Category: '$Category',
-        SubCategorie: '$SubCategorie',
-        SubCategory: '$SubCategory', 
-        Acronym: '$Acronym',
-        Organisation: '$Organisation',
-        Organization: '$Organization',
-        Description: '$Description',
-        Address: '$Address',
-        City: '$City',
-        Province: '$Province',
-        PostalCode: '$PostalCode',
-        Metro: '$Metro',
-        OpenHour: '$OpenHour',
-        Phone1: '$Phone1',
-        Phone2: '$Phone2',
-        Fax: '$Fax',
-        Website: '$Website',
-        Email: '$Email',
-        Notes: '$Notes'
-      }, function(err, qDocList) {
-      console.log(util.inspect(qDocList, false, 10));
-      process.exit(0);
-  }]);
-}
-
-// Recursively go through list adding documents.
-// (This will overload the stack when lots of entries
-// are inserted.  In practice I make heavy use the NodeJS 
-// "async" module to avoid such situations.)
+// Recursively go through file adding services.
 function createDocRecurse (err) {
   if (err) {
       console.log(err);
@@ -150,14 +98,14 @@ function createDocRecurse (err) {
   }
   if (lineList.length) {
       var line = lineList.shift();
-      var doc = new servicesMtlDoc();
+      var doc = new OrgService();
       line.split(';').forEach(function (entry, i) {
           doc[servicesSchemaKeyList[i]] = entry;
+          doc['dateCreated'] = date;
       });
       doc.save(createDocRecurse);
   } else {
-      // After the last entry query to show the result.
-      queryAllEntries();
+      
   }
 }
 
