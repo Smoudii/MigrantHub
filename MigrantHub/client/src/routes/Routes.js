@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import SignUpMigrant from 'account/personal/SignUpMigrant';
 import SignUpBusiness from 'account/business/SignUpBusiness';
 import SignUpAdmin from 'account/admin/SignUpAdmin';
-import Main from 'home/Main';
+import MainPage from 'home/MainPage';
 import BusinessMain from 'home/BusinessMain';
 import Error from 'components/Error';
 import Home from 'home/HomePage';
@@ -49,7 +49,7 @@ class Routes extends Component {
     return (
       <Switch>
         <UnprotectedRoute path="/" component={Home} exact />
-        <ProtectedRoute path="/main" component={Main} type="migrant" exact />
+        <ProtectedRoute path="/main" component={MainPage} type="migrant" exact />
         <ProtectedRoute path="/businessmain" component={BusinessMain} type="business" exact />
         <UnprotectedRoute path="/signup/account-selection" component={AccountSelection} exact />
         <UnprotectedRoute path="/signup/business" component={SignUpBusiness} exact />

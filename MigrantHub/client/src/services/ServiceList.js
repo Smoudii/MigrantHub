@@ -6,16 +6,12 @@ import GridContainer from "components/Grid/GridContainer.jsx";
 import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import ServiceItem from 'services/ServiceItem';
-import Header from 'components/Header/Header';
 import UserTypes from 'lib/UserTypes';
 import QuestionnairePanel from 'components/QuestionnairePanel/QuestionnairePanel';
 import Grid from '@material-ui/core/Grid';
-import NavPanel from 'components/NavPanel/NavPanel';
+import MainLayout from 'home/MainLayout';
 
 const styles = theme => ({
-  mainContainer: {
-    marginLeft: 75,
-  },
   root: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
@@ -106,20 +102,14 @@ class ServiceList extends Component {
     }
   }
 
-  handleDrawerToggle = () => {
-    this.setState({ mobileOpen: !this.state.mobileOpen });
-  };
-
   render() {
-    const { classes, ...rest } = this.props;
+    const { classes, location, history } = this.props;
     const { items, editMode, editOwner, type } = this.state;
     return (
-      <div className={classes.mainContainer}>
-        <NavPanel />
+      <MainLayout location={location} history={history}>
         {type !== UserTypes.ADMIN
           && (
             <div>
-              <Header/>
               {this.renderRedirectToServiceForm()}
               <Button
                 variant="contained"
@@ -129,7 +119,7 @@ class ServiceList extends Component {
               >
                 Create Service
               </Button>
-              </div>
+            </div>
           )
         }
         <GridContainer>
@@ -156,8 +146,8 @@ class ServiceList extends Component {
           <Grid item xs={2}>
             <div className="Panel">{<QuestionnairePanel />}</div>
           </Grid>
-        </GridContainer >
-      </div >
+        </GridContainer>
+      </MainLayout>
     );
   }
 }
@@ -165,6 +155,7 @@ class ServiceList extends Component {
 ServiceList.propTypes = {
   classes: PropTypes.shape({}).isRequired,
   location: PropTypes.shape({}).isRequired,
+  history: PropTypes.shape({}).isRequired,
 };
 
 export default withStyles(styles)(ServiceList);

@@ -47,7 +47,7 @@ import ServiceList from "../services/ServiceList";
 
 var ps;
 
-class Dashboard extends React.Component {
+class MainLayout extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -98,7 +98,7 @@ class Dashboard extends React.Component {
     }
   }
   render() {
-    const { classes, ...rest } = this.props;
+    const { classes, children, ...rest } = this.props;
     const mainPanel =
       classes.mainPanel +
       " " +
@@ -135,22 +135,8 @@ class Dashboard extends React.Component {
           />
 
             <div className={classes.content}>
-
               {/* MAIN PAGE CONTENT */}
-              <Grid item lg={12}>
-                 <div className="Main-feed">
-                   <div className="">{SearchBarVisibility && <SearchBar />}</div>
-                 </div>
-              </Grid>
-              <Grid item lg={12}>
-                 <div className="Main-feed">
-                   <div className="">{serviceCategoryVisibility && <ServiceCategory location={this.props.location} />}</div>
-                 </div>
-              </Grid>
-
-              <Grid item lg={12}>
-                 <div className="Panel">{friendPanelVisibility && <FriendPanel />}</div>
-              </Grid>
+              { children }
             </div>
             <Footer fluid />
         </div>
@@ -159,8 +145,8 @@ class Dashboard extends React.Component {
   }
 }
 
-Dashboard.propTypes = {
+MainLayout.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(appStyle)(Dashboard);
+export default withStyles(appStyle)(MainLayout);
